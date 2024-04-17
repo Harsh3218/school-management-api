@@ -14,5 +14,5 @@ public interface StudentService {
 
     Student updateStudent(Long id, Student student);
 
-    boolean deleteStudent(Long id);
+    String deleteStudent(Long id);
 }
