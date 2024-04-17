@@ -23,8 +23,17 @@ public class Student {
     private String firstName;
     private String lastName;
     private Integer age;
+    private String classroom;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+
     private Parent parent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id")
+
+    private Teacher teacher;
 
 }

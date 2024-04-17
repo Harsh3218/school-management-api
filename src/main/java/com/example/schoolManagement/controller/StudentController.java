@@ -16,7 +16,7 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("/add")
-    public StudentDTO saveStudent(@RequestBody StudentDTO studentDTO) {
+    public String saveStudent(@RequestBody StudentDTO studentDTO) {
         return studentService.saveStudent(studentDTO);
     }
 

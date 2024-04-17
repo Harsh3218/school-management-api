@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StudentService {
 
-    StudentDTO saveStudent(StudentDTO studentDTO);
+    String saveStudent(StudentDTO studentDTO);
 
     StudentDTO getStudentById(Long id);
 
