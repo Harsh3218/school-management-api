@@ -1,6 +1,6 @@
 package com.example.schoolManagement.controller;
 
-import com.example.schoolManagement.entity.Student;
+import com.example.schoolManagement.DTO.StudentDTO;
 import com.example.schoolManagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,37 +16,28 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("/add")
-    public String saveStudent(@RequestBody Student student) {
-
-        studentService.saveStudent(student);
-        return "Student Data Added Successfully";
-
+    public StudentDTO saveStudent(@RequestBody StudentDTO studentDTO) {
+        return studentService.saveStudent(studentDTO);
     }
 
-
     @GetMapping()
-    public List<Student> getAllStudents() {
+    public List<StudentDTO> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-
-    @GetMapping("{id}")
-    public Student getStudentById(@PathVariable int id) {
-        return studentService.getStudentById((long) id);
+    @GetMapping("/{id}")
+    public StudentDTO getStudentById(@PathVariable Long id) {
+        return studentService.getStudentById(id);
     }
 
-
-    @PutMapping("{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student student) {
-
-        Student updateStudent = studentService.updateStudent((long) id, student);
-        return ResponseEntity.ok(updateStudent);
-
+    @PutMapping("/{id}")
+    public StudentDTO updateStudent(@PathVariable Long id, @RequestBody StudentDTO studentDTO) {
+        return studentService.updateStudent(id, studentDTO);
     }
 
-    @DeleteMapping("{id}")
-    public String deleteStudent(@PathVariable int id) {
-        return studentService.deleteStudent((long) id);
+    @DeleteMapping("/{id}")
+    public String deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return "Student deleted";
     }
-
 }

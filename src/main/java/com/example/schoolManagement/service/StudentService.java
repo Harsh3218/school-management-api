@@ -1,18 +1,19 @@
 package com.example.schoolManagement.service;
 
+import com.example.schoolManagement.DTO.StudentDTO;
 import com.example.schoolManagement.entity.Student;
 
 import java.util.List;
 
 public interface StudentService {
 
-    Student saveStudent(Student student);
+    StudentDTO saveStudent(StudentDTO studentDTO);
 
-    Student getStudentById(Long id);
+    StudentDTO getStudentById(Long id);
 
-    List<Student> getAllStudents();
+    List<StudentDTO> getAllStudents();
 
-    Student updateStudent(Long id, Student student);
+    StudentDTO updateStudent(Long id, StudentDTO studentDTO);
 
     String deleteStudent(Long id);
 }

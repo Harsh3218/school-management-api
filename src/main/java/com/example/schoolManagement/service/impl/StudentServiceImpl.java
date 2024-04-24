@@ -1,7 +1,10 @@
 package com.example.schoolManagement.service.impl;
 
+import com.example.schoolManagement.DTO.StudentDTO;
+import com.example.schoolManagement.entity.Parent;
 import com.example.schoolManagement.entity.Student;
 import com.example.schoolManagement.exception.NotFoundException;
+import com.example.schoolManagement.repository.ParentRepo;
 import com.example.schoolManagement.repository.StudentRepo;
 import com.example.schoolManagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -16,66 +20,102 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepo studentRepo;
 
+    @Autowired
+    private ParentRepo parentRepo;
 
     @Override
-    public Student saveStudent(Student student) {
+    public StudentDTO saveStudent(StudentDTO studentDTO) {
 
-        studentRepo.save(student);
-        return student;
+        Optional<Parent> optionalParent = parentRepo.findById(studentDTO.getParentId());
+        Parent parent = optionalParent.orElseThrow(() -> new NotFoundException("Parent not found with id: " + studentDTO.getParentId()));
 
+
+        Student student = new Student();
+        student.setFirstName(studentDTO.getFirstName());
+        student.setLastName(studentDTO.getLastName());
+        student.setAge(studentDTO.getAge());
+        student.setParent(parent);
+
+
+        Student savedStudent = studentRepo.save(student);
+
+
+        return convertToDTO(savedStudent);
+    }
+    @Override
+    public StudentDTO getStudentById(Long id) {
+        Optional<Student> optionalStudent = studentRepo.findById(Math.toIntExact(id));
+        Student student = optionalStudent.orElseThrow(() -> new NotFoundException("Student not found with id: " + id));
+        return convertToDTO(student);
     }
 
-    @Override
-    public Student getStudentById(Long id) {
-
-        Optional<Student> student = studentRepo.findById(Math.toIntExact(id));
-        return student.orElseThrow(()-> new NotFoundException("Student not found with id: " + id));
-
-    }
 
     @Override
-    public List<Student> getAllStudents() {
-        return studentRepo.findAll();
+    public List<StudentDTO> getAllStudents() {
+        List<Student> students = studentRepo.findAll();
+        return students.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
 
     @Override
-    public Student updateStudent(Long id, Student student) {
+    public StudentDTO updateStudent(Long id, StudentDTO studentDTO) {
+        // Find the existing student by ID
+        Optional<Student> optionalStudent = studentRepo.findById(Math.toIntExact(id));
+        Student existingStudent = optionalStudent.orElseThrow(() -> new NotFoundException("Student not found with id: " + id));
 
-        Optional<Student> student1 = studentRepo.findById(Math.toIntExact(id));
-        if (student1.isEmpty()) {
-            throw new NotFoundException("Student not found with id: " + id);
-        }
-        Student student2 = student1.get();
-        if(student2.getFirstName() != null && !student2.getFirstName().isEmpty()){
-            student2.setFirstName(student.getFirstName());
-        }
-        if(student2.getLastName() != null && !student2.getLastName().isEmpty()){
-            student2.setLastName(student.getLastName());
-        }
-        if (student2.getAge() != null){
-            student2.setAge(student.getAge());
-        }
-        if(student2.getFatherName() != null && !student2.getFatherName().isEmpty()){
-            student2.setFatherName(student.getFatherName());
-        }
-        if (student2.getMotherName() != null && !student2.getMotherName().isEmpty()){
-            student2.setMotherName(student.getMotherName());
+        // Update student details from DTO
+        existingStudent.setFirstName(studentDTO.getFirstName());
+        existingStudent.setLastName(studentDTO.getLastName());
+        existingStudent.setAge(studentDTO.getAge());
+
+
+        if (studentDTO.getParentId() != null) {
+
+            Optional<Parent> optionalParent = parentRepo.findById(studentDTO.getParentId());
+            if (optionalParent.isPresent()) {
+
+                existingStudent.setParent(optionalParent.get());
+            } else {
+                throw new NotFoundException("Parent not found with id: " + studentDTO.getParentId());
+            }
+        } else {
+
+            existingStudent.setParent(null);
         }
 
-        studentRepo.save(student2);
-        return student2;
+
+        Student updatedStudent = studentRepo.save(existingStudent);
+
+
+        return convertToDTO(updatedStudent);
     }
 
 
     @Override
     public String deleteStudent(Long id) {
-
-        Optional<Student> student1 = studentRepo.findById(Math.toIntExact(id));
-        if (student1.isEmpty()) {
-            throw new NotFoundException("Student not found with id: " + id);
-        }
+        Optional<Student> optionalStudent = studentRepo.findById(Math.toIntExact(id));
+        Student student = optionalStudent.orElseThrow(() -> new NotFoundException("Student not found with id: " + id));
         studentRepo.deleteById(Math.toIntExact(id));
         return "Student deleted successfully";
     }
+
+
+    private StudentDTO convertToDTO(Student student) {
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setId(student.getId());
+        studentDTO.setFirstName(student.getFirstName());
+        studentDTO.setLastName(student.getLastName());
+        studentDTO.setAge(student.getAge());
+
+        if (student.getParent() != null) {
+            studentDTO.setParentId(student.getParent().getId());
+            studentDTO.setParentFirstName(student.getParent().getFirstName());
+            studentDTO.setParentLastName(student.getParent().getLastName());
+        }
+
+        return studentDTO;
+    }
+
 }
