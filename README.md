@@ -1,7 +1,19 @@
-### 🏫 School Management System
+# 🏫 School Management System
 
 The **School Management System** is a Java Spring Boot application designed to manage student, parent, and teacher information within a school environment. This system provides RESTful API endpoints for CRUD operations on student data, including the ability to associate students with parents and teachers.
 
+### 🧱 Technology Stack
+
+- **Java**: Core programming language
+- **Spring Boot**: Framework for building RESTful APIs
+- **Spring Data JPA**: Persistence layer for interacting with databases
+- **H2 Database**: In-memory database for development
+- **PostgreSQL**: Production database (can be configured for other databases)
+- **Maven**: Dependency management
+- **Postman**: API testing tool
+- **Lombok**: Library for reducing boilerplate code
+- **JUnit**: Testing framework
+  
 #### 🚀 Getting Started
 
 To run the School Management System application locally, follow these steps:
@@ -15,17 +27,12 @@ To run the School Management System application locally, follow these steps:
 
    Open the `application.properties` file located in `src/main/resources` and update the database URL, username, and password according to your local environment:
    ```properties
-   # Database connection properties
-   spring.datasource.url=jdbc:postgresql://your-database-host:5432/your-database-name
+   spring.jpa.hibernate.ddl-auto=update
+   spring.datasource.url=jdbc:mysql://your-database-host/your-database-name
    spring.datasource.username=your-username
    spring.datasource.password=your-password
-
-   # Specify the database driver
-   spring.datasource.driver-class-name=org.postgresql.Driver
-
-   # Hibernate properties
-   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-   spring.jpa.hibernate.ddl-auto=update
+   spring.datasource.driver-class-name =com.mysql.cj.jdbc.Driver
+   spring.jpa.show-sql: true
    ```
 
    Replace `your-database-host`, `your-database-name`, `your-username`, and `your-password` with your specific database details.
