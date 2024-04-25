@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
+/*
+* This Class Represents Teacher Entity that maps the data to the database */
 public class Teacher {
 
     @Id
