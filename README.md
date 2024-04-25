@@ -55,21 +55,21 @@ The School Management System exposes the following RESTful API endpoints:
 - **Students:**
   - `POST /api/students/add`: Add a new student
   - `GET /api/students/{id}`: Retrieve student by ID
-  - `GET /api/students/all`: Retrieve all students
+  - `GET /api/students`: Retrieve all students
   - `PUT /api/students/{id}`: Update student by ID
   - `DELETE /api/students/{id}`: Delete student by ID
 
 - **Parents:**
   - `POST /api/parents/add`: Add a new parent
   - `GET /api/parents/{id}`: Retrieve parent by ID
-  - `GET /api/parents/all`: Retrieve all parents
+  - `GET /api/parents`: Retrieve all parents
   - `PUT /api/parents/{id}`: Update parent by ID
   - `DELETE /api/parents/{id}`: Delete parent by ID
 
 - **Teachers:**
   - `POST /api/teachers/add`: Add a new teacher
   - `GET /api/teachers/{id}`: Retrieve teacher by ID
-  - `GET /api/teachers/all`: Retrieve all teachers
+  - `GET /api/teachers`: Retrieve all teachers
   - `PUT /api/teachers/{id}`: Update teacher by ID
   - `DELETE /api/teachers/{id}`: Delete teacher by ID
 
